@@ -14,7 +14,7 @@ app = Flask(__name__)
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 USERNAME = os.environ.get("APP_USERNAME")
 PASSWORD = os.environ.get("APP_PASSWORD")
-TOKENS = os.environ.get("APP_TOKENS")
+TOKENS = int(os.environ.get("APP_TOKENS"))
 OPENAI_ENGINE = os.environ.get("OPENAI_ENGINE", "gpt-3.5-turbo")
 
 @app.route("/", methods=["GET", "POST"])
