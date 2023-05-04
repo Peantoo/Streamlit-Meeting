@@ -25,11 +25,12 @@ def index():
     return render_template("login.html")
 
 @app.route("/end_meeting", methods=["POST"])
+@app.route("/end_meeting", methods=["POST"])
 def end_meeting():
     if request.method == "POST":
         print("Request data:", request.data)  # Add this print statement
         print("Request JSON:", request.json)  # Add this print statement
-        audio_data = request.json.get("file")
+        audio_data = request.json.get("audio")
         if audio_data:
             try:
                 audio_data = request.form['audio']
@@ -58,10 +59,10 @@ def end_meeting():
                 summary = response.choices[0].text.strip()
                 return jsonify(summary=summary)
 
-    except Exception as e:
-        # Add proper error logging
-        print(e)
-        return jsonify(error="An error occurred while processing the audio."), 500
+            except Exception as e:
+                # Add proper error logging
+                print(e)
+                return jsonify(error="An error occurred while processing the audio."), 500
 
 if __name__ == "__main__":
     app.run()
