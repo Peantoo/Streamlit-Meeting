@@ -41,8 +41,6 @@ def end_meeting():
                     audio_file.write(audio_data)
                     audio_file_path = audio_file.name
 
-                # Convert the audio format using pydub
-                # Convert the audio format using pydub
                 audio = AudioSegment.from_file(audio_file_path, format=audio_format)
                 audio.export(audio_file_path[:-len(audio_format)-1] + ".wav", format="wav")
 
@@ -63,6 +61,7 @@ def end_meeting():
                 print("General Exception:", e)
                 return jsonify(error="An error occurred while processing the audio."), 500
 
+            try:
                 response = openai.ChatCompletion.create(
                     engine=OPENAI_ENGINE,
                     messages=[
