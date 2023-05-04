@@ -13,6 +13,7 @@ app = Flask(__name__)
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 USERNAME = os.environ.get("APP_USERNAME")
 PASSWORD = os.environ.get("APP_PASSWORD")
+OPENAI_ENGINE = os.environ.get("OPENAI_ENGINE", "gpt-3.5-turbo")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -41,7 +42,7 @@ def end_meeting():
 
         prompt = f"Summarize the following meeting transcript: {transcript}"
         response = openai.Completion.create(
-            engine="gpt-3.5-turbo",
+            engine=OPENAI_ENGINE,
             prompt=prompt,
             max_tokens=150,
             n=1,
