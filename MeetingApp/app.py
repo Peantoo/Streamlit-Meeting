@@ -25,7 +25,6 @@ def index():
     return render_template("login.html")
 
 @app.route("/end_meeting", methods=["POST"])
-@app.route("/end_meeting", methods=["POST"])
 def end_meeting():
     if request.method == "POST":
         print("Request data:", request.data)  # Add this print statement
@@ -33,9 +32,7 @@ def end_meeting():
         audio_data = request.json.get("audio")
         if audio_data:
             try:
-                audio_data = request.form['audio']
-                audio_data = audio_data.split(",")[1]
-                audio_data = base64.b64decode(audio_data)
+                audio_data = base64.b64decode(audio_data.split(",")[1])
 
                 with tempfile.TemporaryFile() as audio_file:
                     audio_file.write(audio_data)
