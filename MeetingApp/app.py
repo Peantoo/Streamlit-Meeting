@@ -51,7 +51,17 @@ def end_meeting():
                     audio = r.record(source)
                 transcript = r.recognize_google(audio)
                 print("Transcript:", transcript)
+            except sr.RequestError as e:
+                print("RequestError:", e)
+                return jsonify(error="Could not request results; {0}".format(e)), 500
 
+            except sr.UnknownValueError:
+                print("UnknownValueError")
+                return jsonify(error="Unknown error occurred"), 500
+
+            except Exception as e:
+                print("General Exception:", e)
+                return jsonify(error="An error occurred while processing the audio."), 500
 
                 response = openai.ChatCompletion.create(
                     engine=OPENAI_ENGINE,
