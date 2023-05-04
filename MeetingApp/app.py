@@ -31,6 +31,7 @@ def end_meeting():
     if request.method == "POST":
         audio_data = request.json.get("audio")
         if audio_data:
+            print("Audio data received")
             try:
                 audio_format = audio_data.split(";")[0].split("/")[-1]
                 audio_data = audio_data.split(",")[1]
@@ -49,6 +50,7 @@ def end_meeting():
                 with sr.AudioFile(audio_file_path[:-5] + ".wav") as source:
                     audio = r.record(source)
                 transcript = r.recognize_google(audio)
+                print("Transcript:", transcript)
 
 
                 prompt = f"Summarize the following meeting transcript: {transcript}"
@@ -62,6 +64,7 @@ def end_meeting():
                 )
 
                 summary = response.choices[0].text.strip()
+                print("Summary:", summary)
                 return jsonify(summary=summary)
 
             except Exception as e:
