@@ -26,32 +26,37 @@ def index():
 
 @app.route("/end_meeting", methods=["POST"])
 def end_meeting():
-    try:
-        audio_data = request.form['audio']
-        audio_data = audio_data.split(",")[1]
-        audio_data = base64.b64decode(audio_data)
+    if request.method == "POST":
+        print("Request data:", request.data)  # Add this print statement
+        print("Request JSON:", request.json)  # Add this print statement
+        audio_data = request.json.get("audio")
+        if audio_data:
+            try:
+                audio_data = request.form['audio']
+                audio_data = audio_data.split(",")[1]
+                audio_data = base64.b64decode(audio_data)
 
-        with tempfile.TemporaryFile() as audio_file:
-            audio_file.write(audio_data)
-            audio_file.seek(0)
+                with tempfile.TemporaryFile() as audio_file:
+                    audio_file.write(audio_data)
+                    audio_file.seek(0)
 
-            r = sr.Recognizer()
-            with sr.AudioFile(audio_file) as source:
-                audio = r.record(source)
-            transcript = r.recognize_google(audio)
+                    r = sr.Recognizer()
+                    with sr.AudioFile(audio_file) as source:
+                        audio = r.record(source)
+                    transcript = r.recognize_google(audio)
 
-        prompt = f"Summarize the following meeting transcript: {transcript}"
-        response = openai.Completion.create(
-            engine=OPENAI_ENGINE,
-            prompt=prompt,
-            max_tokens=150,
-            n=1,
-            stop=None,
-            temperature=0.5,
-        )
+                prompt = f"Summarize the following meeting transcript: {transcript}"
+                response = openai.Completion.create(
+                    engine=OPENAI_ENGINE,
+                    prompt=prompt,
+                    max_tokens=150,
+                    n=1,
+                    stop=None,
+                    temperature=0.5,
+                )
 
-        summary = response.choices[0].text.strip()
-        return jsonify(summary=summary)
+                summary = response.choices[0].text.strip()
+                return jsonify(summary=summary)
 
     except Exception as e:
         # Add proper error logging
