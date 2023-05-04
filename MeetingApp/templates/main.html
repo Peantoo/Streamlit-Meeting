@@ -24,17 +24,23 @@
         mediaRecorder.stop();
         mediaRecorder.addEventListener("stop", () => {
           const audioBlob = new Blob(recordedChunks, { type: "audio/webm" });
-          const formData = new FormData();
-          formData.append("file", audioBlob, "audio.webm"); // Change 'audio' to 'file'
-          fetch("/end_meeting", {
-            method: "POST",
-            body: formData
-          })
-          .then(response => response.json())
-          .then(data => {
-            document.getElementById("summary").innerText = data.summary;
-          })
-          .catch(console.error);
+          const reader = new FileReader();
+          reader.readAsDataURL(audioBlob);
+          reader.onloadend = () => {
+            const audioData = reader.result;
+            fetch("/end_meeting", {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ audio: audioData })
+            })
+            .then(response => response.json())
+            .then(data => {
+              document.getElementById("summary").innerText = data.summary;
+            })
+            .catch(console.error);
+          };
         });
       }
     </script>
