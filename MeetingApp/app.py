@@ -29,7 +29,7 @@ def end_meeting():
     if request.method == "POST":
         print("Request data:", request.data)  # Add this print statement
         print("Request JSON:", request.json)  # Add this print statement
-        audio_data = request.json.get("audio")
+        audio_data = request.json.get("file")
         if audio_data:
             try:
                 audio_data = request.form['audio']
