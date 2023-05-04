@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Meeting Summarizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+      let mediaRecorder;
+      let recordedChunks = [];
+
+      function startRecording() {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(stream => {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            mediaRecorder.addEventListener("dataavailable", event => {
+              recordedChunks.push(event.data);
+            });
+          })
+          .catch(console.error);
+      }
+
+      function stopRecording() {
+        mediaRecorder.stop();
+        mediaRecorder.addEventListener("stop", () => {
+          const audioBlob = new Blob(recordedChunks, { type: "audio/webm" });
+          const formData = new FormData();
+          formData.append("file", audioBlob, "audio.webm"); // Change 'audio' to 'file'
+          fetch("/end_meeting", {
+            method: "POST",
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("summary").innerText = data.summary;
+          })
+          .catch(console.error);
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Meeting Summarizer</h1>
+    <button onclick="startRecording()">Start Meeting</button>
+    <button onclick="stopRecording()">End Meeting</button>
+    <h2>Summary:</h2>
+    <pre id="summary"></pre>
+  </body>
+</html>
