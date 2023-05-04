@@ -53,10 +53,11 @@ def end_meeting():
                 print("Transcript:", transcript)
 
 
-                prompt = f"Summarize the following meeting transcript: {transcript}"
                 response = openai.ChatCompletion.create(
-                    model=OPENAI_ENGINE,
-                    prompt=prompt,
+                    engine=OPENAI_ENGINE,
+                    messages=[
+                        {"role": "system", "content": "You are a helpful assistant that summarizes meeting transcripts."},
+                        {"role": "user", "content": f"Summarize the following meeting transcript: {transcript}"}],
                     max_tokens=TOKENS,
                     n=1,
                     stop=None,
