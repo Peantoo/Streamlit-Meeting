@@ -37,7 +37,8 @@
           const formData = new FormData();
           formData.append("file", audioBlob, "audio.wav");
 
-          const response = await fetch("/static", { method: "POST", body: formData });
+          // Update the API route to "/upload"
+          const response = await fetch("/upload", { method: "POST", body: formData });
           const data = await response.json();
 
           console.log("Transcription:", data.transcription);
