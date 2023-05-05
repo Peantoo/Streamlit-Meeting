@@ -41,3 +41,10 @@ textarea {
   font-size: 16px;
   resize: none;
 }
+
+#volume-bar {
+  width: 10px;
+  background-color: green;
+  position: absolute;
+  bottom: 0;
+}
