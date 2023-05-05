@@ -7,9 +7,10 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
+APIKEY = os.environ.get("HF_API_KEY")
 # Speech-to-text
 API_URL = "https://api-inference.huggingface.co/models/jonatasgrosman/wav2vec2-large-xlsr-53-english"
-headers = {"Authorization": "Bearer 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"}
+headers = {"Authorization": APIKEY}
 
 def query(audio_data):
     response = requests.post(API_URL, headers=headers, data=audio_data)
@@ -27,19 +28,13 @@ def upload():
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(file_path)
+    # Read the file into memory
+    audio_data = BytesIO(file.read())
 
-    with open(file_path, 'rb') as f:
-        audio_data = f.read()
-
-    transcription_output = query(audio_data)
+    transcription_output = query(audio_data.getvalue())
     transcription_text = transcription_output['text']
     summary_output = summarizer(transcription_text)
     summary_text = summary_output[0]['summary_text']
-
-    os.remove(file_path)
 
     return jsonify({'transcription': transcription_text, 'summary': summary_text}), 200
 
