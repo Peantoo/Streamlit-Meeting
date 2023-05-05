@@ -2,7 +2,6 @@ import requests
 from transformers import pipeline
 import os
 from flask import Flask, request, jsonify
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -36,6 +35,9 @@ def upload():
     summary_text = summary_output[0]['summary_text']
 
     return jsonify({'transcription': transcription_text, 'summary': summary_text}), 200
-
+    
 if __name__ == '__main__':
-    app.run(debug=True)
+    try:
+        app.run(debug=True)
+    except Exception as e:
+        print(f"Error: {e}")
