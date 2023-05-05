@@ -62,8 +62,9 @@ def end_meeting():
                 return jsonify(error="An error occurred while processing the audio."), 500
 
             try:
+                MODEL = "gpt-3.5-turbo"
                 response = openai.ChatCompletion.create(
-                    engine=OPENAI_ENGINE,
+                    model=MODEL,
                     messages=[
                         {"role": "system", "content": "You are a helpful assistant that summarizes meeting transcripts."},
                         {"role": "user", "content": f"Summarize the following meeting transcript: {transcript}"}],
@@ -73,12 +74,11 @@ def end_meeting():
                     temperature=0.5,
                 )
 
-                summary = response.choices[0].text.strip()
+                summary = response['choices'][0]['message']['content'].strip()
                 print("Summary:", summary)
                 return jsonify(summary=summary)
 
             except Exception as e:
-                # Add proper error logging
                 print(e)
                 return jsonify(error="An error occurred while processing the audio."), 500
 
