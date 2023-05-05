@@ -2,15 +2,11 @@ let audioContext = new AudioContext();
 let analyser = audioContext.createAnalyser();
 let microphoneStream;
 
-navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(stream => {
-        microphoneStream = audioContext.createMediaStreamSource(stream);
-        microphoneStream.connect(analyser);
-        visualizeVolume();
-    })
-    .catch(err => {
-        console.error('Error getting audio stream:', err);
-    });
+function visualize(stream) {
+    microphoneStream = audioContext.createMediaStreamSource(stream);
+    microphoneStream.connect(analyser);
+    visualizeVolume();
+}
 
 function visualizeVolume() {
     let volumeBar = document.getElementById('volume-bar');
