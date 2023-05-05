@@ -42,7 +42,7 @@ textarea {
   resize: none;
 }
 
-#volume-bar {
+.volume-bar {
   width: 10px;
   background-color: green;
   position: absolute;
