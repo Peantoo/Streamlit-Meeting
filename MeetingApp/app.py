@@ -5,7 +5,6 @@ from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
 
 APIKEY = os.environ.get("HF_API_KEY")
 # Speech-to-text
