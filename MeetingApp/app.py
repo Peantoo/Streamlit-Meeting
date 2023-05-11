@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # Set API Key
 APIKEY = os.environ.get("HF_API_KEY")
-os.environ['OPENAI_API_KEY'] = APIKEY
+os.environ['OPENAI_API_KEY'] = os.environ.get("OPENAI_API_KEY")
 
 # Speech-to-text
 API_URL = "https://api-inference.huggingface.co/models/jonatasgrosman/wav2vec2-large-xlsr-53-english"
