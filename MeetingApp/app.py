@@ -24,7 +24,10 @@ def query(audio_data):
 
 # Summarization
 llm = OpenAI(temperature=0)
-summarizer = LLMChain(llm=llm, prompt=PromptTemplate("summarize {text}"), output_key="summary")
+chain = load_summarize_chain(llm, chain_type="map_reduce")
+
+
+#summarizer = LLMChain(llm=llm, prompt=PromptTemplate("summarize {text}"), output_key="summary")
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -41,8 +44,9 @@ def upload():
     # Placeholder block for Speech-to-Text code
     transcription_output = query(audio_data.getvalue())
     transcription_text = transcription_output['text']
-
-    summary_output = summarizer.run(text=transcription_text)
+    
+    summary_output = chain.run(transcription_text)
+    #summary_output = summarizer.run(text=transcription_text)
     summary_text = summary_output['summary']
 
     return jsonify({'transcription': transcription_text, 'summary': summary_text}), 200
