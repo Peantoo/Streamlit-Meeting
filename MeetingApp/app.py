@@ -47,28 +47,6 @@ def upload():
 
     return jsonify({'transcription': transcription_text, 'summary': summary_text}), 200
 
-# Streamlit Interface
-def streamlit_interface():
-    st.title('🎙️ Speech-to-Text Summarizer')
-    st.write("Upload an audio file for transcription and summarization.")
-    audio_file = st.file_uploader("Choose an audio file", type=['wav', 'mp3', 'ogg'])
-
-    if audio_file:
-        audio_data = BytesIO(audio_file.read())
-
-        # Placeholder block for Speech-to-Text code
-        transcription_output = query(audio_data.getvalue())
-        transcription_text = transcription_output['text']
-
-        summary_output = summarizer.run(text=transcription_text)
-        summary_text = summary_output['summary']
-
-        st.write('**Transcription:**')
-        st.write(transcription_text)
-
-        st.write('**Summary:**')
-        st.write(summary_text)
-
 if __name__ == '__main__':
     try:
         # Run Streamlit interface
