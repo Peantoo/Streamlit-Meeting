@@ -33,34 +33,34 @@ def main():
     start_button = st.button("Start Meeting")
     stop_button = st.button("End Meeting")
     
-if stop_button:
-    if webrtc_ctx.state.playing:
-        webrtc_ctx.stop_all()
-        recorder.audio_buffer.seek(0)
-        audio_data = recorder.audio_buffer
+    if stop_button:
+        if webrtc_ctx.state.playing:
+            webrtc_ctx.stop_all()
+            recorder.audio_buffer.seek(0)
+            audio_data = recorder.audio_buffer
 
-        # Send the recorded audio to the Flask API
-        response = requests.post(
-            FLASK_APP_URL,
-            files={"file": (f"audio.wav", audio_data, "audio/wav")},
-        )
+            # Send the recorded audio to the Flask API
+            response = requests.post(
+                FLASK_APP_URL,
+                files={"file": (f"audio.wav", audio_data, "audio/wav")},
+            )
 
-        if response.status_code == 200:
-            result = response.json()
-            transcription_text = result["transcription"]
-            summary_text = result["summary"]
+            if response.status_code == 200:
+                result = response.json()
+                transcription_text = result["transcription"]
+                summary_text = result["summary"]
 
-            st.write('**Transcription:**')
-            st.write(transcription_text)
+                st.write('**Transcription:**')
+                st.write(transcription_text)
 
-            st.write('**Summary:**')
-            st.write(summary_text)
+                st.write('**Summary:**')
+                st.write(summary_text)
+
+            else:
+                st.error(f"Error: {response.status_code}, {response.text}")
 
         else:
-            st.error(f"Error: {response.status_code}, {response.text}")
-
-    else:
-        st.warning("Please start the meeting first before stopping it.")
+            st.warning("Please start the meeting first before stopping it.")
 
 if __name__ == "__main__":
     main()
