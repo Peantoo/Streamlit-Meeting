@@ -31,8 +31,8 @@ def main():
 
     start_button = st.button("Start Meeting")
     stop_button = st.button("End Meeting")
-
-    if stop_button:
+    
+if stop_button:
     if webrtc_ctx.state.playing:
         webrtc_ctx.stop_all()
         recorder.audio_buffer.seek(0)
