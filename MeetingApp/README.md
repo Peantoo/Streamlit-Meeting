@@ -1,5 +1,5 @@
 # streamlit_audio_recorder (Custom Component)
-
+I'm totally stealing this since Streamlit doesn't support audio natively it seems. How dumb.
 Implemented by [Stefan Rummer](https://www.linkedin.com/in/stefanrmmr/) - (work in progress)<br/>
 Based on [doppelgunner](https://github.com/doppelgunner/audio-react-recorder)'s [Audio-React-Recorder](https://www.npmjs.com/package/audio-react-recorder)<br/>
 
