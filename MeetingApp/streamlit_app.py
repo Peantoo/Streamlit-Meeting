@@ -7,7 +7,7 @@ from streamlit_webrtc import (
     webrtc_streamer,
 )
 from io import BytesIO
-from session_state import get
+from streamlit.session_state import get
 import requests
 
 # URL of your the Flask app
@@ -30,7 +30,7 @@ def main():
     session_state = get(recording=False)
 
     recorder = AudioRecorder()
-    webrtc_ctx = webrtc_streamer(key="audio", mode=WebRtcMode.SENDONLY, client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}], "trickle": True}, media_stream_constraints={"video": False, "audio": True},), audio_processor_factory=AudioRecorder)
+    webrtc_ctx = webrtc_streamer(key="audio", mode=WebRtcMode.SENDONLY, client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}], "trickle": True}, media_stream_constraints={"video": False, "audio": True},), audio_processor_factory=recorder)
 
     start_button = st.button("Start Meeting")
     stop_button = st.button("End Meeting")
@@ -62,7 +62,7 @@ def main():
                 st.write(summary_text)
 
             else:
-                st.error(f"Error: {response.status_code}, {response.text}")
+                st.error(f"Error processing the audio. Please try again. (Error: {response.status_code})")
 
         else:
             st.warning("Please start the meeting first before stopping it.")
