@@ -1,3 +1,4 @@
+import av
 import streamlit as st
 from streamlit_webrtc import (
     AudioProcessorBase,
