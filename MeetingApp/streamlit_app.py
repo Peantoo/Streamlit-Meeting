@@ -8,7 +8,7 @@ from streamlit_webrtc import (
 )
 from io import BytesIO
 import requests
-from Meeting-App.st_custom_components import st_audiorec
+from MeetingApp.st_custom_components import st_audiorec
 
 # URL of your the Flask app
 FLASK_APP_URL = "https://meeting-summarizer.herokuapp.com/upload"
