@@ -28,7 +28,7 @@ def main():
     st.write("Click 'Start Meeting' to begin recording. Click 'End Meeting' to stop recording and see the transcription and summary.")
 
     recorder = AudioRecorder()
-    webrtc_ctx = webrtc_streamer(key="audio", mode=WebRtcMode.SENDONLY, client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}], "trickle": True}, media_stream_constraints={"video": False, "audio": True},), audio_processor_factory=AudioRecorder, audio_processor_factory_kwargs={})
+    webrtc_ctx = webrtc_streamer(key="audio", mode=WebRtcMode.SENDONLY, client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}], "trickle": True}, media_stream_constraints={"video": False, "audio": True},), audio_processor_factory=AudioRecorder)
 
     start_button = st.button("Start Meeting")
     stop_button = st.button("End Meeting")
