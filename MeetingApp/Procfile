@@ -1,2 +1,1 @@
-web: gunicorn app:app
-streamlit: sh -c 'streamlit run streamlit_app.py --server.enableCORS false --browser.serverAddress 0.0.0.0 --browser.gatherUsageStats false'
+web: sh setup.sh && streamlit run streamlit_app.py
