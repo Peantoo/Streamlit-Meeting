@@ -30,8 +30,7 @@ def main():
     if "recording" not in st.session_state:
         st.session_state.recording = False
 
-    recorder = AudioRecorder()
-    webrtc_ctx = webrtc_streamer(key="audio", mode=WebRtcMode.SENDONLY, client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}], "trickle": True}, media_stream_constraints={"video": False, "audio": True},), audio_processor_factory=recorder)
+    webrtc_ctx = webrtc_streamer(key="audio", mode=WebRtcMode.SENDONLY, client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}], "trickle": True}, media_stream_constraints={"video": False, "audio": True},), audio_processor_factory=AudioRecorder)
 
     start_button = st.button("Start Meeting")
     stop_button = st.button("End Meeting")
@@ -42,8 +41,8 @@ def main():
     if stop_button:
         if webrtc_ctx.state.playing:
             webrtc_ctx.stop_all()
-            recorder.audio_buffer.seek(0)
-            audio_data = recorder.audio_buffer
+            webrtc_ctx.audio_processor.audio_buffer.seek(0)
+            audio_data = webrtc_ctx.audio_processor.audio_buffer
 
             # Send the recorded audio to the Flask API
             response = requests.post(
