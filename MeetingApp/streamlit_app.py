@@ -7,7 +7,6 @@ from streamlit_webrtc import (
     webrtc_streamer,
 )
 from io import BytesIO
-from streamlit.session_state import get
 import requests
 
 # URL of your the Flask app
@@ -27,7 +26,9 @@ class AudioRecorder(AudioProcessorBase):
 def main():
     st.title('🎙️ Meeting Summarizer')
     st.write("Click 'Start Meeting' to begin recording. Click 'End Meeting' to stop recording and see the transcription and summary.")
-    session_state = get(recording=False)
+    
+    if "recording" not in st.session_state:
+        st.session_state.recording = False
 
     recorder = AudioRecorder()
     webrtc_ctx = webrtc_streamer(key="audio", mode=WebRtcMode.SENDONLY, client_settings=ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}], "trickle": True}, media_stream_constraints={"video": False, "audio": True},), audio_processor_factory=recorder)
@@ -35,8 +36,8 @@ def main():
     start_button = st.button("Start Meeting")
     stop_button = st.button("End Meeting")
     
-    if start_button and not session_state.recording:
-        session_state.recording = True
+    if start_button and not st.session_state.recording:
+        st.session_state.recording = True
         
     if stop_button:
         if webrtc_ctx.state.playing:
@@ -66,7 +67,7 @@ def main():
 
         else:
             st.warning("Please start the meeting first before stopping it.")
-    if session_state.recording:
+    if st.session_state.recording:
         st.warning("Meeting is in progress...")
 
 if __name__ == "__main__":
