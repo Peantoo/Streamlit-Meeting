@@ -1,8 +1,5 @@
-transformers==4.28.1
-flask==2.3.2
 requests==2.30.0
 gunicorn==20.1.0
-langchain==0.0.166
 streamlit==1.22.0
 streamlit-webrtc==0.45.0
-openai==0.27.4
+
